@@ -11,6 +11,12 @@ def read_csv():
     return contacts_list
 
 
+def get_correct_contacts_list(contscts_list: list):
+    for item in contscts_list:
+        name_reqex = re.compile(r'([а-яa-z]+)', flags=re.IGNORECASE)
+        m = name_reqex.match(' '.join((item[0], item[1], item[2])))
+
+
 def write_csv(contacts_list: list):
     with open("phonebook.csv", "w") as f:
         datawriter = csv.writer(f, delimiter=',')
@@ -19,5 +25,5 @@ def write_csv(contacts_list: list):
 
 
 if __name__ == '__main__':
-    contact_list = read_csv()
-    pprint(contact_list)
+    contacts_list = read_csv()
+    get_correct_contacts_list(contacts_list)
