@@ -13,8 +13,11 @@ def read_csv():
 
 def get_correct_contacts_list(contscts_list: list):
     for item in contscts_list:
-        name_reqex = re.compile(r'([а-яa-z]+)', flags=re.IGNORECASE)
+        name_reqex = re.compile(r'([а-яa-z]+)*\W*([а-яa-z]+)*\W*([а-яa-z]+)*', flags=re.IGNORECASE)
         m = name_reqex.match(' '.join((item[0], item[1], item[2])))
+        item[0] = m.group(1) or ''
+        item[1] = m.group(2) or ''
+        item[2] = m.group(3) or ''
 
 
 def write_csv(contacts_list: list):
