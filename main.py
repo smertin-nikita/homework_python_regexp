@@ -11,10 +11,13 @@ def read_csv():
     return contacts_list
 
 
-def set_correct_names(contscts_list: list):
+def get_fullname(lastname: str, firstname: str, surname: str):
+    return ' '.join((lastname, firstname, surname))
+
+def set_correct_names(contscts_list:list):
     for item in contscts_list[1:]:
         regexp = re.compile(r'([а-яa-z]+)?\W*([а-яa-z]+)?\W*([а-яa-z]+)?', flags=re.IGNORECASE)
-        m = regexp.match(' '.join((item[0], item[1], item[2])))
+        m = regexp.match(get_fullname(*item[:3]))
         item[0] = m.group(1) or ''
         item[1] = m.group(2) or ''
         item[2] = m.group(3) or ''
@@ -33,6 +36,13 @@ def write_csv(contacts_list: list):
         datawriter = csv.writer(f, delimiter=',')
         # Вместо contacts_list подставьте свой список
         datawriter.writerows(contacts_list)
+
+
+def remove_duplicate(contacts_list: list):
+    duplicates = set()
+    for item in contacts_list:
+        if item in duplicates:
+            continue
 
 
 if __name__ == '__main__':
