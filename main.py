@@ -36,21 +36,26 @@ def set_correct_phones(contacts_list: list):
 
 
 def write_csv(contacts_list: list):
-    with open("phonebook.csv", "w") as f:
+    with open("phonebook.csv", "w",  encoding='utf-8', newline='') as f:
         datawriter = csv.writer(f, delimiter=',')
-        # Вместо contacts_list подставьте свой список
         datawriter.writerows(contacts_list)
 
 
-def remove_duplicate(contacts_list: list):
-    duplicates = set()
-    for item in contacts_list:
-        if item in duplicates:
-            continue
+def remove_duplicates(contacts_list: list, compare_index=2):
+    temp = deepcopy(contacts_list)
+    for item in temp:
+        i = temp.index(item)
+        for ditem in temp[i+1:]:
+            if item[:compare_index] == ditem[:compare_index]:
+                for j in range(len(ditem)-1):
+                    ditem[j] = ditem[j] or item[j]
+                temp.remove(item)
+                break
+    return temp
 
 
 if __name__ == '__main__':
     contacts_list = read_csv()
     correct_contacts = set_correct_phones(set_correct_names(contacts_list))
-    # pprint(contacts_list)
-    pprint(correct_contacts)
+    correct_contacts = remove_duplicates(correct_contacts)
+    write_csv(correct_contacts)
