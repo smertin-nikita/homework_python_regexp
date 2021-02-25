@@ -26,6 +26,7 @@ def set_correct_names(contacts_list: list):
     for item in temp[1:]:
         regexp = re.compile(r'([а-яa-z]+)?\W*([а-яa-z]+)?\W*([а-яa-z]+)?', flags=re.IGNORECASE)
         m = regexp.match(get_fullname(*item[:3]))
+        # Если группа None то присвоить пустую строку
         item[0] = m.group(1) or ''
         item[1] = m.group(2) or ''
         item[2] = m.group(3) or ''
@@ -41,12 +42,19 @@ def set_correct_phones(contacts_list: list):
 
 
 def remove_duplicates(contacts_list: list, compare_index=2):
+    """
+    Сначала ищет соовпадения у списков по compare_index(по именам),
+    затем не пустые значения записыются во второй список из совпавших,
+    а первый удалется.
+    """
     temp = deepcopy(contacts_list)
     for item in temp:
         i = temp.index(item)
         for ditem in temp[i+1:]:
+            # По имени и фамилии если compare_index = 2
             if item[:compare_index] == ditem[:compare_index]:
                 for j in range(len(ditem)-1):
+                    # присваиваю второму списку значения из первого если не пустые
                     ditem[j] = ditem[j] or item[j]
                 temp.remove(item)
                 break
