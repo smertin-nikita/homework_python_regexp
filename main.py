@@ -1,5 +1,4 @@
 from copy import deepcopy
-from pprint import pprint
 import re
 # читаем адресную книгу в формате CSV в список contacts_list
 import csv
@@ -10,6 +9,12 @@ def read_csv():
         rows = csv.reader(f, delimiter=",")
         contacts_list = list(rows)
     return contacts_list
+
+
+def write_csv(contacts_list: list):
+    with open("phonebook.csv", "w",  encoding='utf-8', newline='') as f:
+        datawriter = csv.writer(f, delimiter=',')
+        datawriter.writerows(contacts_list)
 
 
 def get_fullname(lastname: str, firstname: str, surname: str):
@@ -33,12 +38,6 @@ def set_correct_phones(contacts_list: list):
         regex = re.compile(r'(\+7|8)?[\s\(-]*(\d{3})[\s\)-]*(\d{3})[\s-]*(\d{2})[\s-]*(\d{2})[\(\s]*(доб\.)?\s*(\d+)?.*')
         item[5] = regex.sub(r"+7(\2)\3-\4-\5 \6\7", item[5]).rstrip(' ')
     return temp
-
-
-def write_csv(contacts_list: list):
-    with open("phonebook.csv", "w",  encoding='utf-8', newline='') as f:
-        datawriter = csv.writer(f, delimiter=',')
-        datawriter.writerows(contacts_list)
 
 
 def remove_duplicates(contacts_list: list, compare_index=2):
